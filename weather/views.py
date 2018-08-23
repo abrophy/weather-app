@@ -10,7 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .serializers import ForecastSerializer 
-
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url = '/weather/register/'
@@ -50,6 +51,8 @@ class UserFormView(View):
         return render(request, self.template_name, {'form': form})
 
 class ForecastList(generics.ListAPIView):
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
     queryset = Forecast.objects.all()
     serializer_class = ForecastSerializer
 
