@@ -1,7 +1,7 @@
 from django.views import generic
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Forecast
 from .forms import UserForm
@@ -42,4 +42,29 @@ class UserFormView(View):
                     return redirect('weather:index')
         
         return render(request, self.template_name, {'form': form})
+
+def logout_user(request):
+    logout(request)
+    form = UserForm(request.POST or None)
+    context = {
+        "form": form,
+    }
+    return render(request, 'weather/login.html', context)
+
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                forecasts = Forecast.objects.all()
+                return render(request, 'weather/index.html', {'forecasts': forecasts})
+            else:
+                return render(request, 'weather/login.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'weather/login.html', {'error_message': 'Invalid login'})
+    return render(request, 'weather/login.html')
 
