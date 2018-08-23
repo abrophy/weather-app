@@ -8,7 +8,7 @@ from .forms import UserForm
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from .serializers import ForecastSerializer 
 
 
@@ -49,11 +49,9 @@ class UserFormView(View):
         
         return render(request, self.template_name, {'form': form})
 
-class ForecastList(APIView):
-    def get(self, request):
-        forecasts = Forecast.objects.all()
-        serializer = ForecastSerializer(forecasts, many=True)
-        return Response(serializer.data)
+class ForecastList(generics.ListAPIView):
+    queryset = Forecast.objects.all()
+    serializer_class = ForecastSerializer
 
 
 def logout_user(request):
