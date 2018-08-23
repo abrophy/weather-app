@@ -1,0 +1,13 @@
+{% extends 'weather/base.html' %}
+
+{% block body %}
+    {% if forecasts %}
+        <ul>
+    {% for forecast in forecasts %}
+            <li>{{forecast}}</li>
+    {% endfor %}
+        </ul>
+    {% else %}
+        <h3>No forecasts loaded yet</h3>
+    {% endif %}
+{% endblock %}
