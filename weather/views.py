@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.views import generic
 from .models import Forecast
 
 app_name = 'weather'
 
-def index(request):
-    forecasts = Forecast.objects.all()
-    context = {
-        'forecasts': forecasts
-    }
-    return render(request, 'weather/index.html', context)
+class IndexView(generic.ListView):
+    template_name = 'weather/index.html'
+    context_object_name = 'forecasts'
+
+    def get_queryset(self):
+        return Forecast.objects.all()
