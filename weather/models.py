@@ -7,3 +7,6 @@ class Forecast(models.Model):
     wind_speed = models.IntegerField()
     wind_direction = models.CharField(max_length=10)
     rain = models.IntegerField()
+
+    def __str__(self):
+        return self.date.strftime("%d %b %Y")
