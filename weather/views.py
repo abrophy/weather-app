@@ -6,6 +6,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Forecast
 from .forms import UserForm
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ForecastSerializer 
+
+
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url = '/weather/register/'
     redirect_field_name = 'redirect_to'
@@ -42,6 +48,13 @@ class UserFormView(View):
                     return redirect('weather:index')
         
         return render(request, self.template_name, {'form': form})
+
+class ForecastList(APIView):
+    def get(self, request):
+        forecasts = Forecast.objects.all()
+        serializer = ForecastSerializer(forecasts, many=True)
+        return Response(serializer.data)
+
 
 def logout_user(request):
     logout(request)
