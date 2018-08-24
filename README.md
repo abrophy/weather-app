@@ -34,6 +34,16 @@ records by navigating to the following url:
 
 `<base-url>/admin`
 
+# FORECASTS LIST
+
+After updating the forecasts you can view a paginated list of the
+forecasts at the following url:
+
+`<base-url>/weather`
+
+note that to view this list you must login, if you haven't registered
+yet the application will give you the option to do so.
+
 # JSON API
 
 once hosted you can retrieve a list of forecasts in JSON format by
