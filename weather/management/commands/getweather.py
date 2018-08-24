@@ -21,24 +21,24 @@ class Command(BaseCommand):
         data = requests.post(url, headers=headers, data='{"cityId":"77107"}')
         received_forecast_data = data.json()['value']['Forecasts']
 
-        for forecast in received_forecast_data:
-            date_string = forecast['Date'][6:-2]
+        forecast = received_forecast_data[0]
+        date_string = forecast['Date'][6:-2]
 
-            forecast_date = datetime.date.fromtimestamp(int(date_string) / 1000)
-            forecast_min_temp = int(forecast['LowTemp'])
-            forecast_max_temp = int(forecast['HighTemp'])
-            forecast_wind_speed = int(forecast['WindSpeed'])
-            forecast_wind_direction = forecast['WindDirectionAbreviated']
-            forecast_rain = forecast['PrecipitationProbability']
+        forecast_date = datetime.date.fromtimestamp(int(date_string) / 1000)
+        forecast_min_temp = int(forecast['LowTemp'])
+        forecast_max_temp = int(forecast['HighTemp'])
+        forecast_wind_speed = int(forecast['WindSpeed'])
+        forecast_wind_direction = forecast['WindDirectionAbreviated']
+        forecast_rain = forecast['PrecipitationProbability']
 
-            existing = Forecast.objects.filter(date=forecast_date)
-            if existing:
-                existing.delete()
-            new_forecast = Forecast.objects.create(
-                date=forecast_date,
-                min_temp = forecast_min_temp,
-                max_temp = forecast_max_temp,
-                wind_speed = forecast_wind_speed,
-                wind_direction = forecast_wind_direction,
-                rain = forecast_rain
-            )
+        existing = Forecast.objects.filter(date=forecast_date)
+        if existing:
+            existing.delete()
+        new_forecast = Forecast.objects.create(
+            date=forecast_date,
+            min_temp = forecast_min_temp,
+            max_temp = forecast_max_temp,
+            wind_speed = forecast_wind_speed,
+            wind_direction = forecast_wind_direction,
+            rain = forecast_rain
+        )
