@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Forecast
 from .forms import UserForm
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,6 +19,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
     template_name = 'weather/index.html'
     context_object_name = 'forecasts'
+    paginate_by = 3
 
     def get_queryset(self):
         return Forecast.objects.all()
